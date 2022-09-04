@@ -1,6 +1,27 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./featured.css";
 
 const Featured = () => {
+  const [counts, setCounts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchHotels = async () => {
+      setLoading(true);
+      try {
+        const {data} = await axios.get(
+          `${process.env.REACT_APP_BASE_API}/hotels/countByCity?cities=london,barlin,beijing`
+        );
+        setCounts(data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(true);
+        setLoading(false);
+      }
+    };
+    fetchHotels();
+  },[]);
   return (
     <div className="featured">
       <div className="featuredItem">
@@ -10,11 +31,11 @@ const Featured = () => {
           className="featuredImg"
         />
         <div className="featuredTitles">
-          <h1>Dublin</h1>
-          <h2>123 properties</h2>
+          <h1>London</h1>
+          <h2>{counts[0]} properties</h2>
         </div>
       </div>
-      
+
       <div className="featuredItem">
         <img
           src="https://cf.bstatic.com/xdata/images/city/max500/690334.webp?k=b99df435f06a15a1568ddd5f55d239507c0156985577681ab91274f917af6dbb&o="
@@ -23,7 +44,7 @@ const Featured = () => {
         />
         <div className="featuredTitles">
           <h1>Reno</h1>
-          <h2>533 properties</h2>
+          <h2>{counts[1]} properties</h2>
         </div>
       </div>
       <div className="featuredItem">
@@ -34,7 +55,7 @@ const Featured = () => {
         />
         <div className="featuredTitles">
           <h1>Austin</h1>
-          <h2>532 properties</h2>
+          <h2>{counts[2]} properties</h2>
         </div>
       </div>
     </div>
