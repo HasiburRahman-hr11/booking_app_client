@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
 import "./propertyList.css";
+import useFetch from "../../hooks/useFetch";
 
 const images = [
   "https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=",
@@ -11,24 +10,9 @@ const images = [
 ];
 
 const PropertyList = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const fetchHotels = async () => {
-      setLoading(true);
-      try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/hotels/countByType`
-        );
-        setData(data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
-    fetchHotels();
-  }, []);
+  const { data, loading } = useFetch(
+    `${process.env.REACT_APP_BASE_API}/hotels/countByType`
+  );
   return (
     <>
       {loading ? (
@@ -37,7 +21,7 @@ const PropertyList = () => {
         <div className="pList">
           {data &&
             images.map((img, i) => (
-              <div className="pListItem" key={i+1}>
+              <div className="pListItem" key={i + 1}>
                 <img src={img} alt="" className="pListImg" />
                 <div className="pListTitles">
                   <h1>{data[i]?.type}</h1>

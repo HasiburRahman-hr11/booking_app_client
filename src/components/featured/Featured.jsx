@@ -1,26 +1,11 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
 import "./featured.css";
+import useFetch from "../../hooks/useFetch";
 
 const Featured = () => {
-  const [counts, setCounts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const fetchHotels = async () => {
-      setLoading(true);
-      try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/hotels/countByCity?cities=london,barlin,beijing`
-        );
-        setCounts(data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
-    fetchHotels();
-  }, []);
+  const { data: counts, loading } = useFetch(
+    `${process.env.REACT_APP_BASE_API}/hotels/countByCity?cities=london,barlin,beijing`
+  );
+
   return (
     <>
       {loading ? (
